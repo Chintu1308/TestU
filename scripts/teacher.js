@@ -26,18 +26,19 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 
   form.addEventListener('submit', async function(event) {
-    event.preventDefault();
-    const questions = Array.from(questionsContainer.querySelectorAll('textarea')).map(textarea => textarea.value);
+  event.preventDefault();
+  const questions = Array.from(questionsContainer.querySelectorAll('textarea')).map(textarea => textarea.value);
 
-    const response = await fetch('http://localhost:3000/api/create-questions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ teacherName: 'Teacher', questions })
-    });
-
-    const data = await response.json();
-    alert(`Link created: ${data.link}`);
+  const response = await fetch('http://localhost:3000/api/create-questions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify({ teacherName: 'Teacher', questions })
   });
+
+  const data = await response.json();
+  alert(`Link created: ${data.link}`);
+});
+
 });
