@@ -6,16 +6,117 @@
   <title>Question and Canvas</title>
   <link rel="stylesheet" href="styles/main.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
+  <style>
+    body {
+      font-family: 'Geomanist', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+      position: relative;
+    }
+    #container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 80%;
+    }
+    #editor-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      position: relative;
+    }
+    #editor {
+      position: relative;
+      width: 800px; /* Fixed width */
+      min-height: 500px;
+      padding: 10px;
+      padding-left: 50px;
+      padding-top: 23px;
+      background-color: white;
+      font-family: 'Geomanist';
+      font-size: 16px;
+      line-height: 26px;
+      background-image: linear-gradient(0deg, transparent 24px, rgba(0, 0, 0, 0.1) 25px);
+      background-size: 100% 26px;
+      outline: none;
+      border-radius: 25px;
+      box-shadow: 5px 5px 8px black;
+    }
+    #editor p {
+      margin: 0;
+      padding: 0;
+    }
+    #editor::before {
+      content: "";
+      position: absolute;
+      left: 45px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background-color: rgba(255, 0, 0, 0.1);
+      transition: box-shadow 0.5s ease;
+      background-image: linear-gradient(0deg, rgba(255, 0, 0, 0.1) 24px, transparent 25px);
+      background-size: 100% 26px;
+    }
+    #editor::before:hover {
+      box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.7);
+    }
+    #editor .highlight {
+      background-color: rgba(255, 255, 204, 0.5);
+    }
+    #editor .current-line::before {
+      background-color: rgba(255, 0, 0, 0.7);
+    }
+    .active-line {
+      background-color: #ffdddd;
+    }
+    #editor.active-line::before {
+      background-color: rgba(255, 0, 0, 0.7);
+      box-shadow: 0px 0px 10px rgba(255, 0, 0, 0.7);
+    }
+  </style>
+  <script>
+    window.onload = function() {
+      var editor = document.getElementById('editor');
+      editor.onfocus = function() {
+        editor.classList.add('active-line');
+      }
+      editor.onblur = function() {
+        editor.classList.remove('active-line');
+      }
+      editor.addEventListener('input', function() {
+        var range = window.getSelection().getRangeAt(0);
+        var node = range.startContainer;
+        while (node && node.parentNode !== editor) {
+          node = node.parentNode;
+        }
+        if (node) {
+          var previousLine = document.querySelector('.current-line');
+          if (previousLine) {
+            previousLine.classList.remove('current-line');
+          }
+          node.classList.add('current-line');
+        }
+      });
+    }
+  </script>
 </head>
 <body>
-  <div id="question-container">
-    <!-- Questions will be dynamically inserted here -->
-  </div>
-  <div id="canvas-container">
-    <form id="student-form">
-      <div id="editor" contenteditable="true"></div>
-      <button type="submit">Submit</button>
-    </form>
+  <div id="container">
+    <div id="question-container">
+      <!-- Questions will be dynamically inserted here -->
+    </div>
+    <div id="canvas-container">
+      <form id="student-form">
+        <div id="editor" contenteditable="true"></div>
+        <button type="submit">Submit</button>
+      </form>
+    </div>
   </div>
   <script src="scripts/questions.js"></script>
 </body>
